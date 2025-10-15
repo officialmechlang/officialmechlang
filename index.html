@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mech Programming Language</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            opacity: 0.9;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.9rem 2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .btn:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid white;
+            margin-left: 1rem;
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        section {
+            padding: 5rem 0;
+        }
+        
+        section:nth-child(even) {
+            background-color: white;
+        }
+        
+        h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            position: relative;
+        }
+        
+        h2::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--secondary-color);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            color: var(--secondary-color);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid var(--secondary-color);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+        
+        .feature-card.system {
+            border-top-color: var(--warning-color);
+        }
+        
+        .feature-card.warning {
+            border-top-color: var(--accent-color);
+        }
+        
+        .feature-card h3 {
+            display: flex;
+            align-items: center;
+            margin-top: 0;
+        }
+        
+        .feature-icon {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .code-example {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .code-example .comment {
+            color: #6a9955;
+        }
+        
+        .code-example .keyword {
+            color: #569cd6;
+        }
+        
+        .code-example .string {
+            color: #ce9178;
+        }
+        
+        .code-example .function {
+            color: #dcdcaa;
+        }
+        
+        .implementation-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+        
+        .implementation-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            transition: transform 0.3s;
+        }
+        
+        .implementation-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .implementation-card h3 {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .implementation-card h3 i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .installation-steps {
+            margin-top: 1.5rem;
+        }
+        
+        .installation-steps ol {
+            margin-left: 1.5rem;
+        }
+        
+        .installation-steps li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .command-highlight {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-left: 4px solid var(--warning-color);
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin: 2rem 0;
+        }
+        
+        .command-highlight h4 {
+            color: var(--warning-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .command-highlight h4 .icon {
+            margin-right: 8px;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 3rem 0 2rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            list-style: none;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .footer-links li {
+            margin: 0 1.5rem;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .license {
+            text-align: center;
+            margin-top: 2rem;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--primary-color);
+                flex-direction: column;
+                padding: 1rem 0;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 0.5rem 0;
+                text-align: center;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .btn {
+                display: block;
+                margin: 1rem auto;
+                width: 80%;
+                max-width: 250px;
+            }
+            
+            .btn-secondary {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <span class="logo-icon">⚙️</span>
+                    <span>Mech</span>
+                </a>
+                <button class="mobile-menu-btn">☰</button>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#syntax">Syntax</a></li>
+                    <li><a href="#restart">Restart Command</a></li>
+                    <li><a href="#implementations">Implementations</a></li>
+                    <li><a href="#examples">Examples</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Mech Programming Language</h1>
+                <p>A simple, interpreted programming language designed for basic system operations, text processing, and automation tasks with an easy-to-learn syntax.</p>
+                <a href="#implementations" class="btn">Get Started</a>
+                <a href="#examples" class="btn btn-secondary">View Examples</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="features">
+        <div class="container">
+            <h2>Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3><span class="feature-icon">📝</span> Simple Syntax</h3>
+                    <p>Easy-to-read commands with minimal punctuation for quick learning and development.</p>
+                </div>
+                <div class="feature-card">
+                    <h3><span class="feature-icon">🔊</span> Text-to-Speech</h3>
+                    <p>Built-in <code>say</code> command for audio output to make your programs more interactive.</p>
+                </div>
+                <div class="feature-card system">
+                    <h3><span class="feature-icon">🔄</span> System Control</h3>
+                    <p>Basic system operations like <code>reboot</code> and <code>restart</code> for automation tasks.</p>
+                </div>
+                <div class="feature-card">
+                    <h3><span class="feature-icon">📂</span> File Importing</h3>
+                    <p>Modular code organization with the <code>use</code> command for better project structure.</p>
+                </div>
+                <div class="feature-card">
+                    <h3><span class="feature-icon">🔢</span> Binary Conversion</h3>
+                    <p>Convert text to binary representation with the <code>binary</code> command.</p>
+                </div>
+                <div class="feature-card">
+                    <h3><span class="feature-icon">⚖️</span> Conditional Logic</h3>
+                    <p>Basic <code>if</code> statements for flow control in your programs.</p>
+                </div>
+                <div class="feature-card">
+                    <h3><span class="feature-icon">💻</span> Cross-Platform</h3>
+                    <p>Works on both Windows and Linux systems with consistent behavior.</p>
+                </div>
+                <div class="feature-card">
+                    <h3><span class="feature-icon">🚀</span> Easy Installation</h3>
+                    <p>Simple setup process with minimal dependencies required.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="syntax">
+        <div class="container">
+            <h2>Language Syntax</h2>
+            
+            <h3>Basic Commands</h3>
+            <div class="code-example">
+                <span class="comment"># Print to console</span><br>
+                <span class="keyword">print</span> <span class="string">Hello, World!</span><br><br>
+                
+                <span class="comment"># Text-to-speech</span><br>
+                <span class="keyword">say</span> <span class="string">Hello, I am a Mech</span><br><br>
+                
+                <span class="comment"># Delay execution</span><br>
+                <span class="keyword">sleep</span> 2.5<br>
+                <span class="keyword">zzz</span> 1.0<br><br>
+                
+                <span class="comment"># Binary conversion</span><br>
+                <span class="keyword">binary</span> <span class="string">Hello</span><br><br>
+                
+                <span class="comment"># Conditional execution</span><br>
+                <span class="keyword">if</span> true: <span class="keyword">print</span> <span class="string">This will execute</span><br><br>
+                
+                <span class="comment"># Import other Mech files</span><br>
+                <span class="keyword">use</span> library.mech<br>
+                <span class="keyword">use</span> utilities/helpers.mech<br><br>
+                
+                <span class="comment"># Comments</span><br>
+                <span class="comment"># This is a comment</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="restart">
+        <div class="container">
+            <h2>Restart Command</h2>
+            
+            <div class="command-highlight">
+                <h4><span class="icon">⚠️</span> Important System Command</h4>
+                <p>The <code>restart</code> command allows you to restart applications or services on your system. Use with caution as it will terminate and restart the specified process.</p>
+            </div>
+            
+            <h3>Usage</h3>
+            <div class="code-example">
+                <span class="comment"># Restart a specific application by name</span><br>
+                <span class="keyword">restart</span> <span class="string">"web server"</span><br><br>
+                
+                <span class="comment"># Restart with a delay (in seconds)</span><br>
+                <span class="keyword">restart</span> <span class="string">database</span> <span class="keyword">after</span> 10<br><br>
+                
+                <span class="comment"># Conditional restart based on a condition</span><br>
+                <span class="keyword">if</span> <span class="function">needs_restart</span>: <span class="keyword">restart</span> <span class="string">service</span><br><br>
+                
+                <span class="comment"># Restart multiple services</span><br>
+                <span class="keyword">restart</span> <span class="string">nginx</span><br>
+                <span class="keyword">sleep</span> 5<br>
+                <span class="keyword">restart</span> <span class="string">mysql</span>
+            </div>
+            
+            <h3>Platform Support</h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3><span class="feature-icon">🐧</span> Linux</h3>
+                    <p>Uses systemctl to restart services on Linux systems. Requires appropriate permissions.</p>
+                </div>
+                <div class="feature-card">
+                    <h3><span class="feature-icon">🪟</span> Windows</h3>
+                    <p>Uses PowerShell commands to restart services on Windows systems.</p>
+                </div>
+            </div>
+            
+            <h3>Example: Service Monitor</h3>
+            <div class="code-example">
+                <span class="comment"># service_monitor.mech</span><br>
+                <span class="comment"># Monitor and restart a service if needed</span><br><br>
+                
+                <span class="keyword">print</span> <span class="string">"Starting service monitor..."</span><br>
+                <span class="keyword">say</span> <span class="string">Service monitor activated</span><br><br>
+                
+                <span class="comment"># Check if service is running</span><br>
+                <span class="keyword">if</span> <span class="function">not service_running</span>(<span class="string">"webapp"</span>):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">print</span> <span class="string">"Webapp service not running. Restarting..."</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">restart</span> <span class="string">webapp</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">say</span> <span class="string">Webapp service has been restarted</span><br>
+                <span class="keyword">else</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">print</span> <span class="string">"Webapp service is running normally"</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="implementations">
+        <div class="container">
+            <h2>Implementations</h2>
+            <div class="implementation-cards">
+                <div class="implementation-card">
+                    <h3><i>🐍</i> Mech (Python)</h3>
+                    <p>The original implementation of Mech built with Python 3.6+.</p>
+                    
+                    <div class="installation-steps">
+                        <h4>Installation</h4>
+                        <ol>
+                            <li>Ensure you have Python 3.6+ installed</li>
+                            <li>Install the required dependency:
+                                <div class="code-example">
+                                    pip install pyttsx3
+                                </div>
+                            </li>
+                            <li>Download <code>mech.py</code> to your desired location</li>
+                        </ol>
+                        
+                        <h4>Usage</h4>
+                        <div class="code-example">
+                            python mech.py filename.mech
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="implementation-card">
+                    <h3><i>⬢</i> WebMech (Node.js)</h3>
+                    <p>A Node.js port of Mech with the same syntax and functionality.</p>
+                    
+                    <div class="installation-steps">
+                        <h4>Installation</h4>
+                        <ol>
+                            <li>Ensure you have Node.js installed</li>
+                            <li>You must download the seperate Webmech file that is in the code repository: <a href="https://github.com/eotter-beep/mech/tree/main/webmech">WebMech (https://github.com/eotter-beep/mech/tree/main/webmech)</a></li>
+                        </ol>
+                        
+                        <h4>Usage</h4>
+                        <div class="code-example">
+                            node webmech.js filename.mech
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="examples">
+        <div class="container">
+            <h2>Example Programs</h2>
+            
+            <h3>Basic Hello World</h3>
+            <div class="code-example">
+                <span class="comment"># hello.mech</span><br>
+                <span class="keyword">print</span> <span class="string">Hello, World!</span><br>
+                <span class="keyword">say</span> <span class="string">Greetings from Mech</span>
+            </div>
+            
+            <h3>Service Management Script</h3>
+            <div class="code-example">
+                <span class="comment"># service_manager.mech</span><br>
+                <span class="keyword">print</span> <span class="string">"Service Management Utility"</span><br>
+                <span class="keyword">say</span> <span class="string">Starting service management</span><br><br>
+                
+                <span class="comment"># Restart web server with delay</span><br>
+                <span class="keyword">print</span> <span class="string">"Restarting web server in 5 seconds..."</span><br>
+                <span class="keyword">sleep</span> 5<br>
+                <span class="keyword">restart</span> <span class="string">"web server"</span><br>
+                <span class="keyword">print</span> <span class="string">"Web server restarted successfully"</span><br><br>
+                
+                <span class="comment"># Convert status to binary for logging</span><br>
+                <span class="keyword">binary</span> <span class="string">"Service restart completed"</span>
+            </div>
+            
+            <h3>Interactive Demo</h3>
+            <div class="code-example">
+                <span class="comment"># demo.mech</span><br>
+                <span class="keyword">print</span> <span class="string">Starting demonstration...</span><br>
+                <span class="keyword">say</span> <span class="string">Mech language demo</span><br>
+                <span class="keyword">sleep</span> 1<br>
+                <span class="keyword">print</span> <span class="string">Converting text to binary:</span><br>
+                <span class="keyword">binary</span> Mech<br>
+                <span class="keyword">sleep</span> 2<br>
+                <span class="keyword">print</span> <span class="string">Demo complete!</span>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <h3>Mech Programming Language</h3>
+                <ul class="footer-links">
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Examples</a></li>
+                    <li><a href="#">Community</a></li>
+                    <li><a href="#">Contribute</a></li>
+                </ul>
+                <p class="license">Open source - modify and use as needed. Apache 2.0 license as of Mech 1.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-links').classList.remove('active');
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
